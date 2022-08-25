@@ -11,7 +11,7 @@ public class SimilarityDetectionService {
 
     public void openFile() {
         try {
-            File file = new File("D:/Master/Thesis/4y2n.pdb");
+            File file = new File("src/main/resources/testFile/4y2n.pdb");
             if (checkFileExtension(file)) {
                 readFile(file);
             }
