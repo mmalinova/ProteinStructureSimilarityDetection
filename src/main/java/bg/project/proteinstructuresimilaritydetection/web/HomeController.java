@@ -14,7 +14,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
-        sds.openFile();
+        sds.openFile("src/main/resources/testFile/1bt0.pdb", "src/main/resources/testFile/1we7.pdb");
         return "index";
     }
 }

@@ -9,11 +9,18 @@ import java.util.*;
 @Service
 public class SimilarityDetectionService {
 
-    public void openFile() {
+    public void openFile(String firstFilePath, String secondFilePath) {
         try {
-            File file = new File("src/main/resources/testFile/4y2n.pdb");
-            if (checkFileExtension(file)) {
-                readFile(file);
+            File firstFile = new File(firstFilePath);
+            File secondFile = new File(secondFilePath);
+            if (checkFileExtension(firstFile) && checkFileExtension(secondFile)) {
+                LinkedList<Character> firstSequence = new LinkedList<>();
+                LinkedList<float[]> firstCoordinates = new LinkedList<>();
+                LinkedList<Character> secondSequence = new LinkedList<>();
+                LinkedList<float[]> secondCoordinates = new LinkedList<>();
+                readFile(firstFile, firstSequence, firstCoordinates);
+                readFile(secondFile, secondSequence, secondCoordinates);
+                System.out.println();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -38,52 +45,59 @@ public class SimilarityDetectionService {
         return true;
     }
 
-    private void readFile(File file) {
+    private void readFile(File file, LinkedList<Character> sequence, LinkedList<float[]> coordinates) {
+        Map<String, Map<Integer, Integer>> cardMap = new HashMap<>();
+
         try {
             Scanner reader = new Scanner(file);
-            // These map is needed if we want to know if the values come from HELIX or SHEET,
+            // The map is needed if we want to know if the values come from HELIX or SHEET,
             // instead we use the map below (values)
-            //Map<String, Map<Integer, Integer>> cardMap = new HashMap<>();
-            Map<Integer, Integer> values = new TreeMap<>();
+            //Map<Integer, Integer> values = new TreeMap<>();
             while (reader.hasNextLine()) {
                 String row = reader.nextLine();
                 String[] data = row.split("\\s+");
                 String card = data[0];
-                if (card.equals("HELIX")) {
-                    int startNumber = Integer.parseInt(data[5]);
-                    int endNumber = Integer.parseInt(data[8]);
-                    //cardMap.putIfAbsent(card, new TreeMap<>());
-                    //cardMap.get(card).put(startNumber, endNumber);
-                    values.put(startNumber, endNumber);
-                } else if (card.equals("SHEET")) {
-                    String acid = data[5];
-                    if (acid.equals("A")) {
-                        int startNumber = Integer.parseInt(data[6]);
-                        int endNumber = Integer.parseInt(data[9]);
-                        //cardMap.putIfAbsent(card, new TreeMap<>());
-                        //cardMap.get(card).put(startNumber, endNumber);
-                        values.put(startNumber, endNumber);
+                switch (card) {
+                    case "HELIX" -> {
+                        int startNumber = Integer.parseInt(data[5]);
+                        int endNumber = Integer.parseInt(data[8]);
+                        cardMap.putIfAbsent(card, new TreeMap<>());
+                        cardMap.get(card).put(startNumber, endNumber);
                     }
-                } else if (card.equals("ATOM")) {
-                    String atomType = data[2];
-                    if (atomType.equals("CA")) {
-                        int residueNumber = Integer.parseInt(data[5]);
-                        //for (Map.Entry<String, Map<Integer, Integer>> c : cardMap.entrySet()) {
-                        //    Map<Integer, Integer> values = c.getValue();
-                              Iterator<Map.Entry<Integer, Integer>> it = values.entrySet().iterator();
-                              if (it.hasNext()) {
-                                  Map.Entry<Integer, Integer> entry = it.next();
-                                  if (residueNumber >= entry.getKey() && residueNumber <= entry.getValue()) {
-                                      float X = Float.parseFloat(data[6]);
-                                      float Y = Float.parseFloat(data[7]);
-                                      float Z = Float.parseFloat(data[8]);
-                                      System.out.printf("%.3f   %.3f  %.3f%n", X, Y, Z);
-                                      if (residueNumber == entry.getValue()) {
-                                          it.remove();
+                    //values.put(startNumber, endNumber);
+                    case "SHEET" -> {
+                        String acid = data[5];
+                        if (acid.equals("A")) {
+                            int startNumber = Integer.parseInt(data[6]);
+                            int endNumber = Integer.parseInt(data[9]);
+                            cardMap.putIfAbsent(card, new TreeMap<>());
+                            cardMap.get(card).put(startNumber, endNumber);
+                            //values.put(startNumber, endNumber);
+                        }
+                    }
+                    case "ATOM" -> {
+                        String atomType = data[2];
+                        if (atomType.equals("CA")) {
+                            int residueNumber = Integer.parseInt(data[5]);
+                            for (Map.Entry<String, Map<Integer, Integer>> c : cardMap.entrySet()) {
+                                Map<Integer, Integer> values = c.getValue();
+                                Iterator<Map.Entry<Integer, Integer>> it = values.entrySet().iterator();
+                                if (it.hasNext()) {
+                                    Map.Entry<Integer, Integer> entry = it.next();
+                                    if (residueNumber >= entry.getKey() && residueNumber <= entry.getValue()) {
+                                        sequence.add(c.getKey().equals("HELIX") ? 'H' : 'S');
+                                        float[] currentCoordinates = {Float.parseFloat(data[6]),
+                                                Float.parseFloat(data[7]),
+                                                Float.parseFloat(data[8])
+                                        };
+                                        coordinates.add(currentCoordinates);
+                                        if (residueNumber == entry.getValue()) {
+                                            it.remove();
+                                        }
                                     }
-                                  }
-                              }
-                        //}
+                                }
+                            }
+                        }
                     }
                 }
             }
