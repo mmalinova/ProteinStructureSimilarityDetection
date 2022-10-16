@@ -1,5 +1,7 @@
 package bg.project.proteinstructuresimilaritydetection.service;
 
+import bg.project.proteinstructuresimilaritydetection.config.Calculations;
+import bg.project.proteinstructuresimilaritydetection.config.MyResult;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -8,6 +10,8 @@ import java.util.*;
 
 @Service
 public class SimilarityDetectionService {
+
+    private final Calculations calculate = new Calculations();
 
     public void openFile(String firstFilePath, String secondFilePath) {
         try {
@@ -20,11 +24,85 @@ public class SimilarityDetectionService {
                 LinkedList<float[]> secondCoordinates = new LinkedList<>();
                 readFile(firstFile, firstSequence, firstCoordinates);
                 readFile(secondFile, secondSequence, secondCoordinates);
+
+                double[][] matrix = new double[firstSequence.size() + 1][secondSequence.size() + 1];
+
+                MyResult firstResults = calculateMinAndMaxDistances(firstCoordinates);
+                System.out.println(firstResults.getMinDistance());
+                System.out.println(firstResults.getMaxDistance());
+                MyResult secondResults = calculateMinAndMaxDistances(secondCoordinates);
+                System.out.println(secondResults.getMinDistance());
+                System.out.println(secondResults.getMaxDistance());
+
+                for (int i = 1; i < matrix.length; i++) {
+                    for (int j = 1; j < matrix[i].length; j++) {
+                        calculate.fillMatrixCell(
+                                matrix,
+                                i,
+                                j,
+                                firstSequence.getFirst(),
+                                secondSequence.getFirst(),
+                                firstResults.getMinDistance(),
+                                firstResults.getMaxDistance(),
+                                secondResults.getMinDistance(),
+                                secondResults.getMaxDistance()
+                        );
+                    }
+                    System.out.println();
+                }
+
+                double scoringFunction = calculate.calculateScoringFunction(
+                        firstSequence.getFirst(), secondSequence.getFirst(),
+                        firstResults.getMinDistance(), firstResults.getMaxDistance(),
+                        secondResults.getMinDistance(), secondResults.getMaxDistance()
+                );
+                System.out.println(scoringFunction);
+                firstSequence.removeFirst();
+                secondSequence.removeFirst();
                 System.out.println();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private MyResult calculateMinAndMaxDistances(LinkedList<float[]> coordinates) {
+        double minDistance = Double.MAX_VALUE;
+        double maxDistance = Double.MIN_VALUE;
+        int firstIndex = 0;
+        int secondIndex = 0;
+
+        for (int i = 0; i < coordinates.size(); i++) {
+            if (firstIndex == 0 && coordinates.get(i).length == 0) {
+                firstIndex = i;
+            }
+            else if (coordinates.get(i).length == 0) {
+                secondIndex = i;
+                break;
+            }
+        }
+
+        for (int i = 0; i < firstIndex; i++) {
+            for (int j = firstIndex + 1; j < secondIndex; j++) {
+                double distanceBetweenTwoPoints = calculate.getDistanceBetweenTwoPoints(
+                        coordinates.get(i)[0],
+                        coordinates.get(i)[1],
+                        coordinates.get(i)[2],
+                        coordinates.get(j)[0],
+                        coordinates.get(j)[1],
+                        coordinates.get(j)[2]
+                );
+                if (distanceBetweenTwoPoints <= minDistance) {
+                    minDistance = distanceBetweenTwoPoints;
+                }
+                if (distanceBetweenTwoPoints >= maxDistance) {
+                    maxDistance = distanceBetweenTwoPoints;
+                }
+            }
+        }
+
+        coordinates.subList(0, firstIndex).clear();
+        return new MyResult(minDistance, maxDistance);
     }
 
     private boolean checkFileExtension(File file) {
@@ -45,7 +123,11 @@ public class SimilarityDetectionService {
         return true;
     }
 
-    private void readFile(File file, LinkedList<Character> sequence, LinkedList<float[]> coordinates) {
+    private void readFile(
+            File file,
+            LinkedList<Character> sequence,
+            LinkedList<float[]> coordinates
+    ) {
         Map<String, Map<Integer, Integer>> cardMap = new HashMap<>();
 
         try {
@@ -85,13 +167,16 @@ public class SimilarityDetectionService {
                                 if (it.hasNext()) {
                                     Map.Entry<Integer, Integer> entry = it.next();
                                     if (residueNumber >= entry.getKey() && residueNumber <= entry.getValue()) {
-                                        sequence.add(c.getKey().equals("HELIX") ? 'H' : 'S');
+                                        if (residueNumber == entry.getValue()) {
+                                            sequence.add(c.getKey().equals("HELIX") ? 'H' : 'S');
+                                        }
                                         float[] currentCoordinates = {Float.parseFloat(data[6]),
                                                 Float.parseFloat(data[7]),
                                                 Float.parseFloat(data[8])
                                         };
                                         coordinates.add(currentCoordinates);
                                         if (residueNumber == entry.getValue()) {
+                                            coordinates.add(new float[0]);
                                             it.remove();
                                         }
                                     }
