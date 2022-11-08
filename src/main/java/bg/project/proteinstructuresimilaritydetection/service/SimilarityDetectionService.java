@@ -19,29 +19,24 @@ public class SimilarityDetectionService {
             File secondFile = new File(secondFilePath);
             if (checkFileExtension(firstFile) && checkFileExtension(secondFile)) {
                 LinkedList<Character> firstSequence = new LinkedList<>();
-                LinkedList<float[]> firstCoordinates = new LinkedList<>();
+                LinkedList<LinkedList<float[]>> firstCoordinates = new LinkedList<>();
                 LinkedList<Character> secondSequence = new LinkedList<>();
-                LinkedList<float[]> secondCoordinates = new LinkedList<>();
+                LinkedList<LinkedList<float[]>> secondCoordinates = new LinkedList<>();
                 readFile(firstFile, firstSequence, firstCoordinates);
                 readFile(secondFile, secondSequence, secondCoordinates);
 
                 double[][] matrix = new double[firstSequence.size() + 1][secondSequence.size() + 1];
 
-                MyResult firstResults = calculateMinAndMaxDistances(firstCoordinates);
-                System.out.println(firstResults.getMinDistance());
-                System.out.println(firstResults.getMaxDistance());
-                MyResult secondResults = calculateMinAndMaxDistances(secondCoordinates);
-                System.out.println(secondResults.getMinDistance());
-                System.out.println(secondResults.getMaxDistance());
-
                 for (int i = 1; i < matrix.length; i++) {
                     for (int j = 1; j < matrix[i].length; j++) {
+                        MyResult firstResults = calculateMinAndMaxDistances(firstCoordinates, i - 2, i - 1);
+                        MyResult secondResults = calculateMinAndMaxDistances(secondCoordinates, j - 2, j - 1);
                         calculate.fillMatrixCell(
                                 matrix,
                                 i,
                                 j,
-                                firstSequence.getFirst(),
-                                secondSequence.getFirst(),
+                                firstSequence.get(j - 1),
+                                secondSequence.get(i - 1),
                                 firstResults.getMinDistance(),
                                 firstResults.getMaxDistance(),
                                 secondResults.getMinDistance(),
@@ -50,59 +45,43 @@ public class SimilarityDetectionService {
                     }
                     System.out.println();
                 }
-
-                double scoringFunction = calculate.calculateScoringFunction(
-                        firstSequence.getFirst(), secondSequence.getFirst(),
-                        firstResults.getMinDistance(), firstResults.getMaxDistance(),
-                        secondResults.getMinDistance(), secondResults.getMaxDistance()
-                );
-                System.out.println(scoringFunction);
-                firstSequence.removeFirst();
-                secondSequence.removeFirst();
-                System.out.println();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private MyResult calculateMinAndMaxDistances(LinkedList<float[]> coordinates) {
+    private MyResult calculateMinAndMaxDistances(
+            LinkedList<LinkedList<float[]>> coordinates,
+            int firstIndex,
+            int secondIndex
+    ) {
         double minDistance = Double.MAX_VALUE;
         double maxDistance = Double.MIN_VALUE;
-        int firstIndex = 0;
-        int secondIndex = 0;
 
-        for (int i = 0; i < coordinates.size(); i++) {
-            if (firstIndex == 0 && coordinates.get(i).length == 0) {
-                firstIndex = i;
-            }
-            else if (coordinates.get(i).length == 0) {
-                secondIndex = i;
-                break;
-            }
-        }
-
-        for (int i = 0; i < firstIndex; i++) {
-            for (int j = firstIndex + 1; j < secondIndex; j++) {
-                double distanceBetweenTwoPoints = calculate.getDistanceBetweenTwoPoints(
-                        coordinates.get(i)[0],
-                        coordinates.get(i)[1],
-                        coordinates.get(i)[2],
-                        coordinates.get(j)[0],
-                        coordinates.get(j)[1],
-                        coordinates.get(j)[2]
-                );
-                if (distanceBetweenTwoPoints <= minDistance) {
-                    minDistance = distanceBetweenTwoPoints;
-                }
-                if (distanceBetweenTwoPoints >= maxDistance) {
-                    maxDistance = distanceBetweenTwoPoints;
+        if (firstIndex >= 0 && secondIndex >= 0) {
+            for (int i = 0; i < coordinates.get(firstIndex).size(); i++) {
+                for (int j = 0; j < coordinates.get(secondIndex).size(); j++) {
+                    double distanceBetweenTwoPoints = calculate.getDistanceBetweenTwoPoints(
+                            coordinates.get(firstIndex).get(i)[0],
+                            coordinates.get(firstIndex).get(i)[1],
+                            coordinates.get(firstIndex).get(i)[2],
+                            coordinates.get(secondIndex).get(j)[0],
+                            coordinates.get(secondIndex).get(j)[1],
+                            coordinates.get(secondIndex).get(j)[2]
+                    );
+                    if (distanceBetweenTwoPoints <= minDistance) {
+                        minDistance = distanceBetweenTwoPoints;
+                    }
+                    if (distanceBetweenTwoPoints >= maxDistance) {
+                        maxDistance = distanceBetweenTwoPoints;
+                    }
                 }
             }
+            return new MyResult(minDistance, maxDistance);
+        } else {
+            return new MyResult(0, 0);
         }
-
-        coordinates.subList(0, firstIndex).clear();
-        return new MyResult(minDistance, maxDistance);
     }
 
     private boolean checkFileExtension(File file) {
@@ -126,9 +105,10 @@ public class SimilarityDetectionService {
     private void readFile(
             File file,
             LinkedList<Character> sequence,
-            LinkedList<float[]> coordinates
+            LinkedList<LinkedList<float[]>> coordinates
     ) {
         Map<String, Map<Integer, Integer>> cardMap = new HashMap<>();
+        LinkedList<float[]> currentCoordinates = new LinkedList();
 
         try {
             Scanner reader = new Scanner(file);
@@ -161,6 +141,7 @@ public class SimilarityDetectionService {
                         String atomType = data[2];
                         if (atomType.equals("CA")) {
                             int residueNumber = Integer.parseInt(data[5]);
+
                             for (Map.Entry<String, Map<Integer, Integer>> c : cardMap.entrySet()) {
                                 Map<Integer, Integer> values = c.getValue();
                                 Iterator<Map.Entry<Integer, Integer>> it = values.entrySet().iterator();
@@ -170,13 +151,14 @@ public class SimilarityDetectionService {
                                         if (residueNumber == entry.getValue()) {
                                             sequence.add(c.getKey().equals("HELIX") ? 'H' : 'S');
                                         }
-                                        float[] currentCoordinates = {Float.parseFloat(data[6]),
+                                        currentCoordinates.add(new float[]{Float.parseFloat(data[6]),
                                                 Float.parseFloat(data[7]),
                                                 Float.parseFloat(data[8])
-                                        };
-                                        coordinates.add(currentCoordinates);
+                                        });
+
                                         if (residueNumber == entry.getValue()) {
-                                            coordinates.add(new float[0]);
+                                            coordinates.add(currentCoordinates);
+                                            currentCoordinates = new LinkedList<>();
                                             it.remove();
                                         }
                                     }

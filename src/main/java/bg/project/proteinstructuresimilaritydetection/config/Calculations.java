@@ -23,10 +23,9 @@ public class Calculations {
                 secondMin,
                 secondMax
         );
-        double byColumn = matrix[i - 1][j - 1] + (Constants.NEGATIVE_TYPE_FACTOR);
-        double byRow = matrix[i - 1][j - 1] + (Constants.NEGATIVE_TYPE_FACTOR);
+        double byColumn = matrix[i - 1][j] + (Constants.NEGATIVE_TYPE_FACTOR);
+        double byRow = matrix[i][j - 1] + (Constants.NEGATIVE_TYPE_FACTOR);
         matrix[i][j] = Math.max(Math.max(diagonally, byColumn), byRow);
-        //round to the second digit
     }
 
     public double calculateScoringFunction(
@@ -47,7 +46,15 @@ public class Calculations {
             double secondMin,
             double secondMax
     ) {
-        return Math.abs(((firstMin * firstMin) / firstMax) - ((secondMin * secondMin) / secondMax));
+        if (firstMax == 0 && secondMax == 0) {
+            return 0;
+        } else if (firstMax == 0) {
+            return Math.abs(0 - ((secondMin * secondMin) / secondMax));
+        } else if (secondMax == 0) {
+            return Math.abs(((firstMin * firstMin) / firstMax) - 0);
+        } else {
+            return Math.abs(((firstMin * firstMin) / firstMax) - ((secondMin * secondMin) / secondMax));
+        }
     }
 
      public double getDistanceBetweenTwoPoints(
