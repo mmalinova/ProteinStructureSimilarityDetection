@@ -1,0 +1,21 @@
+﻿#nav {
+    background-color: rgb(255, 236, 225);
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display:flex;
+    justify-content: center;
+}
+
+#nav li {
+    list-style: none;
+    display: list-item;
+    padding: 5px 10px;
+    margin: 0 3px;
+}
+
+#nav li h3 {
+    text-align: center;
+    color: black;
+}

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th=http://www.thymeleaf.org>
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="protein, structure, similarity, detection, Jmol" name="keywords">
+    <meta content="Protein structure similarity detection alrorithm" property="description">
+    <link href="/images/icon.png" rel="icon" type="image/x-icon">
+    <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
+    <script src="/js/app.js" type="module"></script>
+    <link href="https://fonts.googleapis.com/css?family=Sofia" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+</head>
+
+<body>
+<!-- Footer -->
+<footer>
+    <hr style="width:100%;text-align:left;margin-left:0;">
+    <div class="footer">
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/info}">Information</a>
+    </div>
+    <div style="text-align: center">
+        Contact me:
+    </div>
+    <ul id="social-media">
+        <li>
+            <p>2023 &copy;</p>
+        </li>
+        <li>
+            <a th:href="@{https://www.facebook.com/mihaela.malinova.98/}">
+                <img alt="facebook icon" src="/images/facebook.svg">
+            </a>
+        </li>
+        <li>
+            <a th:href="@{https://www.instagram.com/mihaellamalinova/}">
+                <img alt="instagram icon" src="/images/instagram.svg">
+            </a>
+        </li>
+        <li>
+            <a th:href="@{https://www.linkedin.com/in/mihaela-malinova-72352319a/}">
+                <img alt="linkedIn icon" src="/images/linkedin.svg">
+            </a>
+        </li>
+    </ul>
+</footer>
+</body>
+</html>

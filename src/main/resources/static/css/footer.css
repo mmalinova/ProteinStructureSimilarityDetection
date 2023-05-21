@@ -1,0 +1,24 @@
+footer {
+    background-color: rgb(255, 236, 225);
+    font-family: "Sofia", sans-serif;
+}
+
+.footer a {
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 16px;
+    font-family: 'Lobster', cursive;
+}
+
+#social-media {
+    width: 40%;
+    margin: auto;
+    list-style-type: none;
+    overflow: hidden;
+}
+
+#social-media li {
+    float: left;
+}

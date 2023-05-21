@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th=http://www.thymeleaf.org>
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="protein, structure, similarity, detection, Jmol" name="keywords">
+    <meta content="Protein structure similarity detection alrorithm" property="description">
+    <link href="/images/icon.png" rel="icon" type="image/x-icon">
+    <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
+    <script src="/js/app.js" type="module"></script>
+    <link href="https://fonts.googleapis.com/css?family=Sofia" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+
+    <title>Similarity Detection - Information</title>
+</head>
+<body>
+<div th:replace="fragments/navbar">Navbar</div>
+<div id="container">
+    <hr style="width:100%;text-align:left;margin-left:0;margin-top: -1px">
+    <div class="container">
+        <p style="text-align: center; font-weight: bold;"><br>Welcome to "Protein Structure Similarity Detection"</p><br>
+        <p style="margin: 20px;">Protein structure alignment algorithms are often time-consuming, resulting in challenges for large-scale protein structure similarity-based retrieval. There is an urgent need for more efficient structure comparison approaches as the number of protein structures increases rapidly.<br><br>
+            The comparison algorithm used for Protein structure similarity detection here is End-Space Free Alignment with Geometric Properties Detection.<br>
+            This is an alignment technique, which ignore the requirement that sequences start
+            and end at the same place.<br>
+            It allows aligning of sequences that overlap or include one
+            another and is suitable for protein classification and similarity detection.<br>
+            Time complexity of protein secondary structure similarity detection, using
+            End-Space Free Alignment with Geometric Properties Detection is O(m,n).<br><br><br>
+    </div>
+    <div th:replace="fragments/footer">Footer</div>
+</div>
+</body>
+</html>

@@ -1,10 +1,100 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en"
+      xmlns:th=http://www.thymeleaf.org>
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="protein, structure, similarity, detection, Jmol" name="keywords">
+    <meta content="Protein structure similarity detection alrorithm" property="description">
+    <link href="/images/icon.png" rel="icon" type="image/x-icon">
+    <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
+    <script src="/js/app.js" type="module"></script>
+    <script src="/jmol/jsmol/JSmol.min.js"></script>
+    <script src="/jmol/jsmol/js/Jmol2.js"></script>
+    <script> jmolInitialize("/jmol/jsmol");</script>
+    <link href="https://fonts.googleapis.com/css?family=Sofia" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+
+    <title>Protein Structure Similarity Detection</title>
 </head>
 <body>
-
+<div th:replace="fragments/navbar">Navbar</div>
+<div id="container">
+    <hr style="width:100%;text-align:left;margin-left:0;margin-top: -1px">
+    <div class="row" style="margin-bottom: 255px">
+        <form enctype="multipart/form-data" id="file-upload-form"
+              style="margin-top: 10px"
+              th:action="@{/upload}"
+              th:method="POST"
+              th:object="${addFilesModel}"
+        >
+            <div id="info" style="margin-bottom: 5px">
+                <p style="margin-bottom: 20px">In order to detect the degree of similarity between two PDB files you need to enter the score
+                    function for type and the two PDB files below! If you are not sure what it means, please go to <a
+                            th:href="@{/info}">Information</a> to get you know with the algorithm. Use "Detect" button to start the algorithm!</p>
+                <p>Scoring function:</p>
+                <label for="positiveFactor">Positive:</label>
+                <input id="positiveFactor"
+                       name="positiveFactor"
+                       type="number"
+                />
+                <label for="negativeFactor">Negative:</label>
+                <input id="negativeFactor"
+                       name="negativeFactor"
+                       type="number"
+                />
+                <br><br>
+                <input type="submit" value="Detect">
+            </div>
+            <div class="column">
+                <h3>PDB File Upload</h3>
+                <!-- Upload -->
+                <p class="alert alert-primary" th:if="*{firstMessage ne null}" th:text="*{firstMessage}"></p>
+                <input id="file-upload"
+                       name="firstFile"
+                       style="margin-top: 10px"
+                       type="file"
+                />
+                <!--                <input type="submit">-->
+                <!--            </form>-->
+                <div class="script">
+                    <script th:inline="javascript">
+                        /*<![CDATA[*/
+                        const firstFile = /*[[*{firstFileName}]]*/ '';
+                        /*]]>*/
+                        if (firstFile) jmolApplet(400, 'load ' + firstFile + '', '0');
+                    </script>
+                </div>
+            </div>
+            <div class="column">
+                <h3>PDB File Upload</h3>
+                <!-- Upload  -->
+                <p class="alert alert-primary" th:if="*{secondMessage ne null}" th:text="*{secondMessage}"></p>
+                <!--            <form enctype="multipart/form-data" id="second-file-upload-form"-->
+                <!--                  style="margin-top: 20px"-->
+                <!--                  th:action="@{/second_upload}"-->
+                <!--                  th:method="POST"-->
+                <!--            >-->
+                <input id="second-file-upload"
+                       name="secondFile"
+                       style="margin-top: 10px"
+                       type="file"
+                />
+                <!--            </form>-->
+                <div class="script">
+                    <script th:inline="javascript">
+                        /*<![CDATA[*/
+                        const secondFile = /*[[*{secondFileName}]]*/ '';
+                        /*]]>*/
+                        if (secondFile) jmolApplet(400, 'load ' + secondFile + '', '1');
+                    </script>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div th:replace="fragments/footer">Footer</div>
+</div>
 </body>
 </html>
