@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
+import static bg.project.proteinstructuresimilaritydetection.constants.Constants.ERROR_OCCURRED;
+import static bg.project.proteinstructuresimilaritydetection.constants.Constants.SIMILARITY_DEGREE;
+
 @Service
 public class SimilarityDetectionService {
 
@@ -17,34 +20,32 @@ public class SimilarityDetectionService {
         try {
             File firstFile = new File(firstFilePath);
             File secondFile = new File(secondFilePath);
-            if (checkFileExtension(firstFile) && checkFileExtension(secondFile)) {
-                LinkedList<Character> firstSequence = new LinkedList<>();
-                LinkedList<LinkedList<float[]>> firstCoordinates = new LinkedList<>();
-                LinkedList<Character> secondSequence = new LinkedList<>();
-                LinkedList<LinkedList<float[]>> secondCoordinates = new LinkedList<>();
-                readFile(firstFile, firstSequence, firstCoordinates);
-                readFile(secondFile, secondSequence, secondCoordinates);
+            LinkedList<Character> firstSequence = new LinkedList<>();
+            LinkedList<LinkedList<float[]>> firstCoordinates = new LinkedList<>();
+            LinkedList<Character> secondSequence = new LinkedList<>();
+            LinkedList<LinkedList<float[]>> secondCoordinates = new LinkedList<>();
+            readFile(firstFile, firstSequence, firstCoordinates);
+            readFile(secondFile, secondSequence, secondCoordinates);
 
-                double[][] matrix = new double[firstSequence.size() + 1][secondSequence.size() + 1];
+            double[][] matrix = new double[firstSequence.size() + 1][secondSequence.size() + 1];
 
-                for (int i = 1; i < matrix.length; i++) {
-                    for (int j = 1; j < matrix[i].length; j++) {
-                        MyResult firstResults = calculateMinAndMaxDistances(firstCoordinates, i - 2, i - 1);
-                        MyResult secondResults = calculateMinAndMaxDistances(secondCoordinates, j - 2, j - 1);
-                        calculate.fillMatrixCell(
-                                matrix,
-                                i,
-                                j,
-                                firstSequence.get(j - 1),
-                                secondSequence.get(i - 1),
-                                firstResults.getMinDistance(),
-                                firstResults.getMaxDistance(),
-                                secondResults.getMinDistance(),
-                                secondResults.getMaxDistance()
-                        );
-                    }
-                    System.out.println();
+            for (int i = 1; i < matrix.length; i++) {
+                for (int j = 1; j < matrix[i].length; j++) {
+                    MyResult firstResults = calculateMinAndMaxDistances(firstCoordinates, i - 2, i - 1);
+                    MyResult secondResults = calculateMinAndMaxDistances(secondCoordinates, j - 2, j - 1);
+                    calculate.fillMatrixCell(
+                            matrix,
+                            i,
+                            j,
+                            firstSequence.get(j - 1),
+                            secondSequence.get(i - 1),
+                            firstResults.getMinDistance(),
+                            firstResults.getMaxDistance(),
+                            secondResults.getMinDistance(),
+                            secondResults.getMaxDistance()
+                    );
                 }
+                System.out.println();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -84,31 +85,13 @@ public class SimilarityDetectionService {
         }
     }
 
-    private boolean checkFileExtension(File file) {
-        // convert the file name to string
-        String fileName = file.toString();
-
-        int index = fileName.lastIndexOf('.');
-        if (index > 0) {
-            String extension = fileName.substring(index + 1);
-            if (!extension.equals("pdb")) {
-                System.out.println("Please upload .pdb file!");
-                return false;
-            }
-        } else {
-            System.out.println("The given file is without extension. Please check the file extension first!");
-            return false;
-        }
-        return true;
-    }
-
     private void readFile(
             File file,
             LinkedList<Character> sequence,
             LinkedList<LinkedList<float[]>> coordinates
     ) {
         Map<String, Map<Integer, Integer>> cardMap = new HashMap<>();
-        LinkedList<float[]> currentCoordinates = new LinkedList();
+        LinkedList<float[]> currentCoordinates = new LinkedList<float[]>();
 
         try {
             Scanner reader = new Scanner(file);
@@ -170,8 +153,12 @@ public class SimilarityDetectionService {
             }
             reader.close();
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
+            System.out.println(ERROR_OCCURRED);
             e.printStackTrace();
         }
+    }
+
+    public String getTheDegreeOfSimilarity() {
+        return SIMILARITY_DEGREE + 3.33;
     }
 }
