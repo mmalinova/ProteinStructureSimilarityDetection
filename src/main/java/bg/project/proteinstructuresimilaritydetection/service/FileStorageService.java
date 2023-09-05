@@ -32,10 +32,11 @@ public class FileStorageService {
     }
 
     public Path storeFile(MultipartFile file,
-                            String fileName) {
+                          String fileName) {
         try {
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+            file.getInputStream().close();
 
             return targetLocation;
         } catch (IOException ex) {

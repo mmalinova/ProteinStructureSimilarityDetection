@@ -9,5 +9,4 @@ public class ProteinStructureSimilarityDetectionApplication {
     public static void main(String[] args) {
         SpringApplication.run(ProteinStructureSimilarityDetectionApplication.class, args);
     }
-
 }

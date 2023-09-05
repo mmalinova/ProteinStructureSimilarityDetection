@@ -21,7 +21,7 @@
 <div id="container">
     <hr style="width:100%;text-align:left;margin-left:0;margin-top: -1px">
     <div class="container">
-        <p style="text-align: center; font-weight: bold;"><br>Welcome to "Protein Structure Similarity Detection"</p><br>
+        <p style="text-align: center; font-weight: bold;"><br>Welcome to "Protein Structure Similarity Detection"</p>
         <p style="margin: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;Protein structure alignment algorithms are often time-consuming, resulting in challenges for large-scale protein structure similarity-based retrieval. There is an urgent need for more efficient structure comparison approaches as the number of protein structures increases rapidly.<br><br>
             &nbsp;&nbsp;&nbsp;&nbsp;The comparison algorithm used for Protein structure similarity detection here is End-Space Free Alignment with Geometric Properties Detection.<br>
             This is an alignment technique, which ignore the requirement that sequences start
@@ -34,7 +34,8 @@
             &nbsp;&nbsp;&nbsp;&nbsp;<b>1.</b> Enter the Positive(the number that will be used if there is a match between the secondary structure elements) and Negative(the number that will be used if there is a difference between the secondary structure elements) scoring function type.<br>
             &nbsp;&nbsp;&nbsp;&nbsp;<b>2.</b> Upload the two PDB files which will be compared. Please make sure that all the information is at the PDB files. This will affect the final results! Also make sure that the selected file did not exceed the maximum permitted size of 50 MB!<br>
             &nbsp;&nbsp;&nbsp;&nbsp;<b>3.</b> Click on the "Detect" button.<br><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;After clicking on the "Detect" button the algorithm gets all the input information, processes it and calculate the Degree of similarity. Meanwhile, you can see 3D structure of the two uploaded protein PDB files. A library <a th:href="@{https://jmol.sourceforge.net/}"><b>Jmol</b></a> is used for this purpose.<br><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;After clicking on the "Detect" button the algorithm gets all the input information, processes it and calculate the Degree of similarity. Meanwhile, you can see 3D structure of the two uploaded protein PDB files. A library <a th:href="@{https://jmol.sourceforge.net/}"><b>Jmol</b></a> is used for this purpose.
+            Please make sure that all the information is at the PDB files. This will affect the final results!<br><br>
             If you are not sure from where to get the PDB files, we recommend doing it so from <a th:href="@{https://www.rcsb.org/}"><b>here</b></a>.
             <br><br><br>
     </div>

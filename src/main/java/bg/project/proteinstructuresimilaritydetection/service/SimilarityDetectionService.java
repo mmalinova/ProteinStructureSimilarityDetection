@@ -37,15 +37,14 @@ public class SimilarityDetectionService {
                             matrix,
                             i,
                             j,
-                            firstSequence.get(j - 1),
-                            secondSequence.get(i - 1),
+                            firstSequence.get(i - 1),
+                            secondSequence.get(j - 1),
                             firstResults.getMinDistance(),
                             firstResults.getMaxDistance(),
                             secondResults.getMinDistance(),
                             secondResults.getMaxDistance()
                     );
                 }
-                System.out.println();
             }
         } catch (Exception e) {
             e.printStackTrace();

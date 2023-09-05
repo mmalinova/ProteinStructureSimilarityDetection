@@ -1,5 +1,7 @@
 package bg.project.proteinstructuresimilaritydetection.model;
 
+import bg.project.proteinstructuresimilaritydetection.constants.Constants;
+
 public class Files {
 
     private String firstFileName;
@@ -85,6 +87,7 @@ public class Files {
     }
 
     public void setPositiveFactor(String positiveFactor) {
+        Constants.POSITIVE_TYPE_FACTOR = Integer.parseInt(positiveFactor);
         this.positiveFactor = positiveFactor;
     }
 
@@ -93,6 +96,7 @@ public class Files {
     }
 
     public void setNegativeFactor(String negativeFactor) {
+        Constants.NEGATIVE_TYPE_FACTOR = Integer.parseInt(negativeFactor);
         this.negativeFactor = negativeFactor;
     }
 }

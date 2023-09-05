@@ -16,16 +16,6 @@
     transform-style: preserve-3d;
 }
 
-@property --swing-x {
-    initial-value: 0;
-    inherits: false;
-    syntax: '<integer>';
-}
-@property --swing-y {
-    initial-value: 0;
-    inherits: false;
-    syntax: '<integer>';
-}
 #error-body {
     min-height: 100vh;
     display: flex;

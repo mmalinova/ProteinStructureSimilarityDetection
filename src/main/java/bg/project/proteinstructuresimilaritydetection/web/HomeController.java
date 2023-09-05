@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.nio.file.Path;
 
 import static bg.project.proteinstructuresimilaritydetection.constants.Constants.*;
@@ -22,6 +23,8 @@ public class HomeController {
 
     private final SimilarityDetectionService similarityDetectionService;
     private final FileStorageService fileStorageService;
+    private String first = "";
+    private String second = "";
 
     public HomeController(
             SimilarityDetectionService similarityDetectionService,
@@ -33,15 +36,14 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
         Files file = new Files();
-//        file.setDegreeOfSimilarity(similarityDetectionService.getTheDegreeOfSimilarity());
         if (!model.containsAttribute("addFilesModel")) {
             model.addAttribute("addFilesModel", file);
         } else {
             Files files = (Files) model.getAttribute("addFilesModel");
-            if (files != null &&
-                    files.getFirstFilePath() != null &&
-                    files.getSecondFilePath() != null)
-                similarityDetectionService.openFile(files.getFirstFilePath(), files.getSecondFilePath());
+//            if (files != null &&
+//                    files.getFirstFilePath() != null &&
+//                    files.getSecondFilePath() != null)
+//                similarityDetectionService.openFile(files.getFirstFilePath(), files.getSecondFilePath());
         }
         return "index";
     }
@@ -51,7 +53,7 @@ public class HomeController {
                                   @RequestParam("secondFile") MultipartFile secondFile,
                                   @Valid Files files,
                                   BindingResult bindingResult,
-                                  RedirectAttributes redirectAttributes) {
+                                  RedirectAttributes redirectAttributes) throws InterruptedException, IOException {
         // check scoring function factor
         if (files.getPositiveFactor().isEmpty() || files.getNegativeFactor().isEmpty()) {
             files.setScoringMessage(SCORING_FUNCTION_FACTOR_REQUIRED);
@@ -118,12 +120,33 @@ public class HomeController {
         Path firstFilePath = fileStorageService.storeFile(firstFile, firstOriginalFileName);
         Path secondFilePath = fileStorageService.storeFile(secondFile, secondOriginalFileName);
 
+        firstFile.getInputStream().close();
+        secondFile.getInputStream().close();
+
         files.setFirstFilePath(firstFilePath.toString());
         files.setSecondFilePath(secondFilePath.toString());
+
+        first = files.getFirstFileName();
+        second = files.getSecondFileName();
+
+//        similarityDetectionService.openFile(firstFilePath.toString(), secondFilePath.toString());
+        files.setDegreeOfSimilarity(similarityDetectionService.getTheDegreeOfSimilarity());
 
         redirectAttributes.addFlashAttribute("addFilesModel", files);
 
         return "redirect:/";
+    }
+
+    @PostMapping("/visualization")
+    public String upload(RedirectAttributes redirectAttributes) throws InterruptedException {
+        Files file = new Files();
+
+        file.setFirstFileName(first);
+        file.setSecondFileName(second);
+
+        redirectAttributes.addFlashAttribute("addFilesModel", file);
+
+        return "redirect:/visualization";
     }
 
     private String getOriginalFileName(MultipartFile file) {
