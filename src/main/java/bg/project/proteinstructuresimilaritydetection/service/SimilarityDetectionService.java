@@ -60,6 +60,13 @@ public class SimilarityDetectionService {
         }
     }
 
+    public String getTheDegreeOfSimilarity() {
+        return SIMILARITY_DEGREE + calculate.calculateTheDegreeOfSimilarity(
+                maxValueFromTheMatrix,
+                numberOfElementsFromTheSmallestProtein
+        ) + "%";
+    }
+
     private MyResult calculateMinAndMaxDistances(
             LinkedList<LinkedList<float[]>> coordinates,
             int firstIndex,
@@ -190,12 +197,5 @@ public class SimilarityDetectionService {
         }
 
         return maxInLastColumn;
-    }
-
-    public String getTheDegreeOfSimilarity() {
-        return SIMILARITY_DEGREE + calculate.calculateTheDegreeOfSimilarity(
-                maxValueFromTheMatrix,
-                numberOfElementsFromTheSmallestProtein
-        ) + "%";
     }
 }

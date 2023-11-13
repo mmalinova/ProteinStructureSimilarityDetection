@@ -13,7 +13,8 @@ public class URLs {
     private String positiveFactor;
     private String negativeFactor;
 
-    public URLs() {}
+    public URLs() {
+    }
 
     public String getFirstMessage() {
         return firstMessage;

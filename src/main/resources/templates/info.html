@@ -21,8 +21,12 @@
     <hr style="width:100%;text-align:left;margin-left:0;margin-top: -1px">
     <div class="container">
         <p style="text-align: center; font-weight: bold;"><br>Welcome to "Protein Structure Similarity Detection"</p>
-        <p style="margin: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;Protein structure alignment algorithms are often time-consuming, resulting in challenges for large-scale protein structure similarity-based retrieval. There is an urgent need for more efficient structure comparison approaches as the number of protein structures increases rapidly.<br><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;The comparison algorithm used for Protein structure similarity detection here is End-Space Free Alignment with Geometric Properties Detection.<br>
+        <p style="margin: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;Protein structure alignment algorithms are often
+            time-consuming, resulting in challenges for large-scale protein structure similarity-based retrieval. There
+            is an urgent need for more efficient structure comparison approaches as the number of protein structures
+            increases rapidly.<br><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;The comparison algorithm used for Protein structure similarity detection here is
+            End-Space Free Alignment with Geometric Properties Detection.<br>
             This is an alignment technique, which ignore the requirement that sequences start
             and end at the same place.<br>
             It allows aligning of sequences that overlap or include one
@@ -30,13 +34,24 @@
             Time complexity of protein secondary structure similarity detection, using
             End-Space Free Alignment with Geometric Properties Detection is <b>O(m,n)</b>.<br><br>
             In order to use the algorithm you need to:<br><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;<b>1.</b> Enter the Positive(the number that will be used if there is a match between the secondary structure elements) and Negative(the number that will be used if there is a difference between the secondary structure elements) scoring function type.<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;<b>2.</b> Specify the two PDB URLs which describes the PDB files that will be compared. Please make sure that the URLs you provide are from the official <a th:href="@{https://www.rcsb.org/}"><b>PDB</b></a> (Protein data bank) site and that all the information is at the PDB URLs. This will affect the final results!<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>2.1</b> In order to get the right URL for your protein, you can type the name of the protein in the Search bar.<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>2.2</b> After getting the right protein click on <b>"Display Files" -> "PDB Format"</b>.<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>2.3</b> Then copy the URL address and paste it to the field below the label <b>"PDB File URL:"</b>.<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<b>1.</b> Enter the Positive(the number that will be used if there is a match
+            between the secondary structure elements) and Negative(the number that will be used if there is a difference
+            between the secondary structure elements) scoring function type.<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<b>2.</b> Specify the two PDB URLs which describes the PDB files that will be
+            compared. Please make sure that the URLs you provide are from the official <a
+                    th:href="@{https://www.rcsb.org/}"><b>PDB</b></a> (Protein data bank) site and that all the
+            information is at the PDB URLs. This will affect the final results!<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>2.1</b> In order to get the right URL for your protein, you can type
+            the name of the protein in the Search bar.<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>2.2</b> After getting the right protein click on <b>"Display Files"
+                -> "PDB Format"</b>.<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>2.3</b> Then copy the URL address and paste it to the field below the
+            label <b>"PDB File URL:"</b>.<br>
             &nbsp;&nbsp;&nbsp;&nbsp;<b>3.</b> Click on the <b>"Detect"</b> button.<br><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;After clicking on the "Detect" button the algorithm gets all the input information, processes it and calculate the Degree of similarity. Meanwhile, you can see 3D structure of the two uploaded protein PDB URLs. A library <a th:href="@{https://jmol.sourceforge.net/}"><b>Jmol</b></a> is used for this purpose.
+            &nbsp;&nbsp;&nbsp;&nbsp;After clicking on the "Detect" button the algorithm gets all the input information,
+            processes it and calculate the Degree of similarity. Meanwhile, you can see 3D structure of the two uploaded
+            protein PDB URLs. A library <a th:href="@{https://jmol.sourceforge.net/}"><b>Jmol</b></a> is used for this
+            purpose.
             <br><br><br>
     </div>
     <div th:replace="fragments/footer">Footer</div>

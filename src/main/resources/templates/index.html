@@ -47,16 +47,16 @@
                 <label for="positiveFactor">Positive:</label>
                 <input class="factor"
                        id="positiveFactor"
+                       min="1"
                        th:field="*{positiveFactor}"
                        type="number"
-                       min="1"
                 />
                 <label for="negativeFactor" style="margin-left: 10px">Negative:</label>
                 <input class="factor"
                        id="negativeFactor"
+                       max="0"
                        th:field="*{negativeFactor}"
                        type="number"
-                       max="0"
                 />
                 <br><br>
                 <div class="column">
@@ -75,7 +75,9 @@
                     <div class="script">
                         <script th:inline="javascript">
                             /*<![CDATA[*/
-                            const firstFile = [[*{firstFilePath}]];
+                            const firstFile = [[ * {firstFilePath}]
+                            ]
+                            ;
                             /*]]>*/
                             if (firstFile) jmolApplet(400, 'load ' + firstFile + '', '0');
                         </script>
@@ -97,7 +99,9 @@
                     <div class="script">
                         <script th:inline="javascript">
                             /*<![CDATA[*/
-                            const secondFile = [[*{secondFilePath}]];
+                            const secondFile = [[ * {secondFilePath}]
+                            ]
+                            ;
                             /*]]>*/
                             if (secondFile) jmolApplet(400, 'load ' + secondFile + '', '1');
                         </script>

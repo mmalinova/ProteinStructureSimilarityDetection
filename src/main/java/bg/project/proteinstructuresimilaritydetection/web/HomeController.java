@@ -34,21 +34,6 @@ public class HomeController {
         this.pdbFileService = pdbFileService;
     }
 
-    private static String getFileExtension(Path path) {
-        String fileName = path.getFileName().toString();
-        int dotIndex = fileName.lastIndexOf(".");
-
-        if (dotIndex >= 0 && dotIndex < fileName.length() - 1) {
-            String extension = fileName.substring(dotIndex + 1);
-            if (!extension.equals("pdb"))
-                return PDB_EXTENSION_REQUIRED;
-            else
-                return null;
-        } else {
-            return PDB_EXTENSION_REQUIRED;
-        }
-    }
-
     @GetMapping("/")
     public String home(Model model) {
         URLs URLs = new URLs();
@@ -168,6 +153,21 @@ public class HomeController {
         } catch (URISyntaxException e) {
             e.printStackTrace();
             return URL_ERROR;
+        }
+    }
+
+    private static String getFileExtension(Path path) {
+        String fileName = path.getFileName().toString();
+        int dotIndex = fileName.lastIndexOf(".");
+
+        if (dotIndex >= 0 && dotIndex < fileName.length() - 1) {
+            String extension = fileName.substring(dotIndex + 1);
+            if (!extension.equals("pdb"))
+                return PDB_EXTENSION_REQUIRED;
+            else
+                return null;
+        } else {
+            return PDB_EXTENSION_REQUIRED;
         }
     }
 
