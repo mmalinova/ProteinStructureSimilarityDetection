@@ -1,7 +1,7 @@
 package bg.project.proteinstructuresimilaritydetection.web;
 
-import bg.project.proteinstructuresimilaritydetection.model.Files;
-import bg.project.proteinstructuresimilaritydetection.service.FileStorageService;
+import bg.project.proteinstructuresimilaritydetection.model.URLs;
+import bg.project.proteinstructuresimilaritydetection.service.PDBFileService;
 import bg.project.proteinstructuresimilaritydetection.service.SimilarityDetectionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,12 +9,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import javax.validation.Valid;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Objects;
 
 import static bg.project.proteinstructuresimilaritydetection.constants.Constants.*;
 
@@ -22,158 +24,160 @@ import static bg.project.proteinstructuresimilaritydetection.constants.Constants
 public class HomeController {
 
     private final SimilarityDetectionService similarityDetectionService;
-    private final FileStorageService fileStorageService;
-    private String first = "";
-    private String second = "";
+    private final PDBFileService pdbFileService;
 
     public HomeController(
             SimilarityDetectionService similarityDetectionService,
-            FileStorageService fileStorageService) {
+            PDBFileService pdbFileService
+    ) {
         this.similarityDetectionService = similarityDetectionService;
-        this.fileStorageService = fileStorageService;
+        this.pdbFileService = pdbFileService;
     }
 
-    @GetMapping("/")
-    public String home(Model model) {
-        Files file = new Files();
-        if (!model.containsAttribute("addFilesModel")) {
-            model.addAttribute("addFilesModel", file);
-        } else {
-            Files files = (Files) model.getAttribute("addFilesModel");
-//            if (files != null &&
-//                    files.getFirstFilePath() != null &&
-//                    files.getSecondFilePath() != null)
-//                similarityDetectionService.openFile(files.getFirstFilePath(), files.getSecondFilePath());
-        }
-        return "index";
-    }
+    private static String getFileExtension(Path path) {
+        String fileName = path.getFileName().toString();
+        int dotIndex = fileName.lastIndexOf(".");
 
-    @PostMapping("/upload")
-    public String uploadFirstFile(@RequestParam("firstFile") MultipartFile firstFile,
-                                  @RequestParam("secondFile") MultipartFile secondFile,
-                                  @Valid Files files,
-                                  BindingResult bindingResult,
-                                  RedirectAttributes redirectAttributes) throws InterruptedException, IOException {
-        // check scoring function factor
-        if (files.getPositiveFactor().isEmpty() || files.getNegativeFactor().isEmpty()) {
-            files.setScoringMessage(SCORING_FUNCTION_FACTOR_REQUIRED);
-            redirectAfterError(redirectAttributes, files, bindingResult);
-
-            return "redirect:/";
-        }
-        // check if files are empty
-        if (firstFile.isEmpty() && secondFile.isEmpty()) {
-            files.setFirstMessage(FILE_REQUIRED);
-            files.setSecondMessage(FILE_REQUIRED);
-            redirectAfterError(redirectAttributes, files, bindingResult);
-
-            return "redirect:/";
-        }
-        if (firstFile.isEmpty()) {
-            files.setFirstMessage(FILE_REQUIRED);
-            redirectAfterError(redirectAttributes, files, bindingResult);
-
-            return "redirect:/";
-        }
-        if (secondFile.isEmpty()) {
-            files.setSecondMessage(FILE_REQUIRED);
-            redirectAfterError(redirectAttributes, files, bindingResult);
-
-            return "redirect:/";
-        }
-
-        String firstOriginalFileName = getOriginalFileName(firstFile);
-        if (firstOriginalFileName.contains("Sorry")) {
-            files.setFirstMessage(firstOriginalFileName);
-            redirectAfterError(redirectAttributes, files, bindingResult);
-
-            return "redirect:/";
-        } else {
-            files.setFirstFileName(firstOriginalFileName);
-        }
-        String secondOriginalFileName = getOriginalFileName(secondFile);
-        if (secondOriginalFileName.contains("Sorry")) {
-            files.setSecondMessage(secondOriginalFileName);
-            redirectAfterError(redirectAttributes, files, bindingResult);
-
-            return "redirect:/";
-        } else {
-            files.setSecondFileName(secondOriginalFileName);
-        }
-
-        String firstFileExtension = checkFileExtension(firstOriginalFileName);
-        if (firstFileExtension != null) {
-            files.setFirstMessage(firstFileExtension);
-            redirectAfterError(redirectAttributes, files, bindingResult);
-
-            return "redirect:/";
-        }
-        String secondFileExtension = checkFileExtension(secondOriginalFileName);
-        if (secondFileExtension != null) {
-            files.setSecondMessage(secondFileExtension);
-            redirectAfterError(redirectAttributes, files, bindingResult);
-
-            return "redirect:/";
-        }
-
-        // normalize the file path
-        Path firstFilePath = fileStorageService.storeFile(firstFile, firstOriginalFileName);
-        Path secondFilePath = fileStorageService.storeFile(secondFile, secondOriginalFileName);
-
-        firstFile.getInputStream().close();
-        secondFile.getInputStream().close();
-
-        files.setFirstFilePath(firstFilePath.toString());
-        files.setSecondFilePath(secondFilePath.toString());
-
-        first = files.getFirstFileName();
-        second = files.getSecondFileName();
-
-//        similarityDetectionService.openFile(firstFilePath.toString(), secondFilePath.toString());
-        files.setDegreeOfSimilarity(similarityDetectionService.getTheDegreeOfSimilarity());
-
-        redirectAttributes.addFlashAttribute("addFilesModel", files);
-
-        return "redirect:/";
-    }
-
-    @PostMapping("/visualization")
-    public String upload(RedirectAttributes redirectAttributes) throws InterruptedException {
-        Files file = new Files();
-
-        file.setFirstFileName(first);
-        file.setSecondFileName(second);
-
-        redirectAttributes.addFlashAttribute("addFilesModel", file);
-
-        return "redirect:/visualization";
-    }
-
-    private String getOriginalFileName(MultipartFile file) {
-        String fileName = file.getOriginalFilename();
-
-        if (fileName == null)
-            return ORIGINAL_FILE_NAME_ERROR;
-        return fileName;
-    }
-
-    private String checkFileExtension(String fileName) {
-        int index = fileName.lastIndexOf('.');
-        if (index > 0) {
-            String extension = fileName.substring(index + 1);
+        if (dotIndex >= 0 && dotIndex < fileName.length() - 1) {
+            String extension = fileName.substring(dotIndex + 1);
             if (!extension.equals("pdb"))
                 return PDB_EXTENSION_REQUIRED;
             else
                 return null;
+        } else {
+            return PDB_EXTENSION_REQUIRED;
         }
-        return EXTENSION_REQUIRED;
+    }
+
+    @GetMapping("/")
+    public String home(Model model) {
+        URLs URLs = new URLs();
+        if (!model.containsAttribute("addModel"))
+            model.addAttribute("addModel", URLs);
+        return "index";
+    }
+
+    @PostMapping("/upload")
+    public String upload(@RequestParam("firstFilePath") String firstFilePath,
+                         @RequestParam("secondFilePath") String secondFilePath,
+                         @Valid URLs URLs,
+                         BindingResult bindingResult,
+                         RedirectAttributes redirectAttributes) throws InterruptedException, IOException {
+        // check scoring function factor
+        if (URLs.getPositiveFactor() == null || URLs.getNegativeFactor() == null) {
+            URLs.setScoringMessage(SCORING_FUNCTION_FACTOR_REQUIRED);
+            redirectAfterError(redirectAttributes, URLs, bindingResult);
+
+            return "redirect:/";
+        }
+        // check if URLs are empty
+        if (firstFilePath.isEmpty() && secondFilePath.isEmpty()) {
+            URLs.setFirstMessage(FILE_REQUIRED);
+            URLs.setSecondMessage(FILE_REQUIRED);
+            redirectAfterError(redirectAttributes, URLs, bindingResult);
+
+            return "redirect:/";
+        }
+
+        if (firstFilePath.isEmpty()) {
+            URLs.setFirstMessage(FILE_REQUIRED);
+            redirectAfterError(redirectAttributes, URLs, bindingResult);
+
+            return "redirect:/";
+        }
+
+        if (secondFilePath.isEmpty()) {
+            URLs.setSecondMessage(FILE_REQUIRED);
+            redirectAfterError(redirectAttributes, URLs, bindingResult);
+
+            return "redirect:/";
+        }
+
+        String firstFileExtension = checkFileExtension(firstFilePath);
+        String secondFileExtension = checkFileExtension(secondFilePath);
+        if (firstFileExtension != null && secondFileExtension != null) {
+            URLs.setFirstMessage(firstFileExtension);
+            URLs.setSecondMessage(secondFileExtension);
+            redirectAfterError(redirectAttributes, URLs, bindingResult);
+
+            return "redirect:/";
+        }
+
+        if (firstFileExtension != null) {
+            URLs.setFirstMessage(firstFileExtension);
+            redirectAfterError(redirectAttributes, URLs, bindingResult);
+
+            return "redirect:/";
+        }
+
+        if (secondFileExtension != null) {
+            URLs.setSecondMessage(secondFileExtension);
+            redirectAfterError(redirectAttributes, URLs, bindingResult);
+
+            return "redirect:/";
+        }
+
+        String firstFileContent = pdbFileService.fetchPDBFileContent(firstFilePath);
+        String secondFileContent = pdbFileService.fetchPDBFileContent(secondFilePath);
+
+        if (Objects.equals(firstFileContent, PDB_NOT_LOADED) && Objects.equals(secondFileContent, PDB_NOT_LOADED)) {
+            URLs.setFirstMessage(PDB_NOT_LOADED);
+            URLs.setSecondMessage(PDB_NOT_LOADED);
+            redirectAfterError(redirectAttributes, URLs, bindingResult);
+
+            return "redirect:/";
+        }
+
+        if (Objects.equals(firstFileContent, PDB_NOT_LOADED)) {
+            URLs.setFirstMessage(PDB_NOT_LOADED);
+            redirectAfterError(redirectAttributes, URLs, bindingResult);
+
+            return "redirect:/";
+        }
+
+        if (Objects.equals(secondFileContent, PDB_NOT_LOADED)) {
+            URLs.setSecondMessage(PDB_NOT_LOADED);
+            redirectAfterError(redirectAttributes, URLs, bindingResult);
+
+            return "redirect:/";
+        }
+
+        URLs.setFirstFilePath(firstFilePath);
+        URLs.setSecondFilePath(secondFilePath);
+
+        similarityDetectionService.openFile(firstFileContent, secondFileContent);
+        URLs.setDegreeOfSimilarity(similarityDetectionService.getTheDegreeOfSimilarity());
+
+        redirectAttributes.addFlashAttribute("addModel", URLs);
+
+        return "redirect:/";
+    }
+
+    private String checkFileExtension(String url) {
+        try {
+            // Parse the URL into a URI
+            URI uri = new URI(url);
+            // Extract the path part from the URI
+            String path = uri.getPath();
+            // Create a Path object from the path
+            Path filePath = Paths.get(path);
+            // Get the file extension
+            String fileExtension = getFileExtension(filePath);
+            System.out.println("File Extension: " + fileExtension);
+            return fileExtension;
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return URL_ERROR;
+        }
     }
 
     private void redirectAfterError(
             RedirectAttributes redirectAttributes,
-            @Valid Files files,
+            @Valid URLs URLs,
             BindingResult bindingResult) {
-        redirectAttributes.addFlashAttribute("addFilesModel", files);
-        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.addFilesModel", bindingResult);
+        URLs.setFirstFilePath(null);
+        URLs.setSecondFilePath(null);
+        redirectAttributes.addFlashAttribute("addModel", URLs);
+        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.addModel", bindingResult);
     }
 }

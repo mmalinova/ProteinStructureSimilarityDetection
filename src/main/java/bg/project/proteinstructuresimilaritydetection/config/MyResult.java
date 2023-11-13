@@ -1,6 +1,7 @@
 package bg.project.proteinstructuresimilaritydetection.config;
 
 public final class MyResult {
+
     private final double minDistance;
     private final double maxDistance;
 

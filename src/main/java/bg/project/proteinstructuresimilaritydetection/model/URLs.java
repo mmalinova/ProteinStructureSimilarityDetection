@@ -2,11 +2,9 @@ package bg.project.proteinstructuresimilaritydetection.model;
 
 import bg.project.proteinstructuresimilaritydetection.constants.Constants;
 
-public class Files {
+public class URLs {
 
-    private String firstFileName;
     private String firstMessage;
-    private String secondFileName;
     private String secondMessage;
     private String scoringMessage;
     private String degreeOfSimilarity;
@@ -15,16 +13,7 @@ public class Files {
     private String positiveFactor;
     private String negativeFactor;
 
-    public Files() {
-    }
-
-    public String getFirstFileName() {
-        return firstFileName;
-    }
-
-    public void setFirstFileName(String firstFileName) {
-        this.firstFileName = firstFileName;
-    }
+    public URLs() {}
 
     public String getFirstMessage() {
         return firstMessage;
@@ -32,14 +21,6 @@ public class Files {
 
     public void setFirstMessage(String firstMessage) {
         this.firstMessage = firstMessage;
-    }
-
-    public String getSecondFileName() {
-        return secondFileName;
-    }
-
-    public void setSecondFileName(String secondFileName) {
-        this.secondFileName = secondFileName;
     }
 
     public String getSecondMessage() {

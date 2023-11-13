@@ -89,7 +89,7 @@ for(i in a.split("\n")){
 
 print "aflowDualWrite(binaryAlloy, a, b) loaded"
 
-//Should go through and write .txt files for every group to give data points for a
+//Should go through and write .txt URLs for every group to give data points for a
 //convex hull.
 
 function aflowConvexHull(binaryAlloy) {
@@ -145,7 +145,7 @@ return q
 print "aflowConvexHull(binaryAlloy) loaded"
 
 function aflowCheckBinary(binaryAlloy){
-	if(prompt("Do you want to read all the files?", "yes")=="yes"){
+	if(prompt("Do you want to read all the URLs?", "yes")=="yes"){
 		var x=load("http://aflowlib.org/binary_alloys.php")
 		var list=[]
 		var nd=[]
@@ -227,7 +227,7 @@ function aflowGetInfo(){
 print "aflowGetInfo() ready"
 
 function aflowSimilarityCheck(file1, file2, range) {
-	load files @file1 @file2
+	load URLs @file1 @file2
 	var latticeScaling = aflowGetLatticeScaling(range)
 	if (!latticeScaling)return
 	load append @file2 filter @{"latticeScaling="+(latticeScaling)}
@@ -237,7 +237,7 @@ function aflowSimilarityCheck(file1, file2, range) {
 
 function aflowGetLatticeScaling(range) {
 // sample script only
-// with two files loaded, create a polyhedron for
+// with two URLs loaded, create a polyhedron for
 // one atom in each file of the same element.
 // Using SMARTS, find the two matching polyhedra and determine their
 // volumes. Then use that volume difference to reload the
@@ -262,7 +262,7 @@ function aflowGetLatticeScaling(range) {
 // calculate their symmetry, including SMILES and SMARTS representations
   calculate symmetry polyhedra
 // using the SMARTS for first, find the second
-// this could fail the files are different or two atoms have different environments
+// this could fail the URLs are different or two atoms have different environments
   s1 = atom1.polyhedron.getProperty("smarts")
   all1 = polyhedra(s1)
   print "for SMILES="+s1 +"\n found " + all1
@@ -312,7 +312,7 @@ function aflowCreateBZ(p1,p2) {
 
   // for example: http://aflowlib.mems.duke.edu/AFLOWDATA/ICSD_WEB/TRI/B1Cd1Li1O3_ICSD_200615/KPOINTS.bands
 
-  // unfortunately, this will not be sufficient for TRI1a and TRI2a systems, as those files have the TRI1B data
+  // unfortunately, this will not be sufficient for TRI1a and TRI2a systems, as those URLs have the TRI1B data
   // instead. So we have to make that information ourselves.
 
   var latticeType = load("http://aflowlib.mems.duke.edu/AFLOWDATA/ICSD_WEB/"+ p1 + "/" + p2 +"/?lattice_variation_relax").trim()

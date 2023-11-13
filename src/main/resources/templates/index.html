@@ -10,7 +10,6 @@
     <meta content="Protein structure similarity detection alrorithm" property="description">
     <link href="/images/icon.png" rel="icon" type="image/x-icon">
     <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
-    <script src="/js/app.js" type="module"></script>
     <script src="/jmol/jsmol/JSmol.min.js"></script>
     <script src="/jmol/jsmol/js/Jmol2.js"></script>
     <script> jmolInitialize("/jmol/jsmol");</script>
@@ -28,84 +27,89 @@
               style="margin-top: 15px"
               th:action="@{/upload}"
               th:method="POST"
-              th:object="${addFilesModel}"
+              th:object="${addModel}"
         >
-            <div id="info" style="margin-bottom: 5px">
+            <div id="info" style="margin-bottom: 10px">
                 <p style="margin-bottom: 30px">In order to detect the degree of similarity between two PDB files you
-                    need to enter the score
-                    function factor for type and the two PDB files below! If you are not sure what it means, please go
-                    to <a
-                            th:href="@{/info}">Information</a> to get you know with the algorithm. Use "Detect" button
-                    to start the algorithm!</p>
+                    need to enter the score function factor for type and the two PDB File URLs below!
+                    <br>
+                    Please, provide the file URLs from the
+                    official <a th:href="@{https://www.rcsb.org/}"><b>PDB</b></a> (Protein data bank) site, otherwise,
+                    you risk getting errors and inaccurate results!
+                    <br>
+                    If you want to know which algorithm is used or want to read more about the required steps, please go
+                    to <a th:href="@{/info}"><b>Information</b></a> to get you know.
+                    <br>
+                    Use <b>"Detect"</b> button to start the algorithm!</p>
                 <p>Scoring function:</p>
                 <p class="alert alert-primary" style="color: red" th:if="*{scoringMessage ne null}"
                    th:text="*{scoringMessage}"></p>
                 <label for="positiveFactor">Positive:</label>
-                <input id="positiveFactor"
+                <input class="factor"
+                       id="positiveFactor"
                        th:field="*{positiveFactor}"
                        type="number"
+                       min="1"
                 />
-                <label for="negativeFactor">Negative:</label>
-                <input id="negativeFactor"
+                <label for="negativeFactor" style="margin-left: 10px">Negative:</label>
+                <input class="factor"
+                       id="negativeFactor"
                        th:field="*{negativeFactor}"
                        type="number"
+                       max="0"
                 />
                 <br><br>
-            <div class="column">
-                <h3>PDB File Upload</h3>
-                <!-- Upload -->
-                <p class="alert alert-primary" style="color: red" th:if="*{firstMessage ne null}"
-                   th:text="*{firstMessage}"></p>
-                <input id="file-upload"
-                       name="firstFile"
-                       style="margin-top: 10px; margin-left: 70px"
-                       type="file"
-                />
-                <!--                <div class="script">-->
-                <!--                    <script th:inline="javascript">-->
-                <!--                        /*<![CDATA[*/-->
-                <!--                        const firstFile = /*[[*{firstFileName}]]*/ '';-->
-                <!--                        /*]]>*/-->
-                <!--                        if (firstFile) jmolApplet(400, 'load ' + firstFile + '', '0');-->
-                <!--                    </script>-->
-                <!--                </div>-->
+                <div class="column">
+                    <h3>PDB File URL:</h3>
+                    <div class="alert alert-primary message" th:if="*{firstMessage ne null}"
+                         th:text="*{firstMessage}"></div>
+                    <div class="alert alert-primary message" style="visibility: hidden"
+                         th:if="*{firstMessage == null && secondMessage ne null}"
+                         th:text="*{secondMessage}"></div>
+                    <input class="file-url"
+                           id="first-file-url"
+                           name="firstFilePath"
+                           th:field="*{firstFilePath}"
+                           type="url"
+                    />
+                    <div class="script">
+                        <script th:inline="javascript">
+                            /*<![CDATA[*/
+                            const firstFile = [[*{firstFilePath}]];
+                            /*]]>*/
+                            if (firstFile) jmolApplet(400, 'load ' + firstFile + '', '0');
+                        </script>
+                    </div>
+                </div>
+                <div class="column">
+                    <h3>PDB File URL:</h3>
+                    <div class="alert alert-primary message" th:if="*{secondMessage ne null}"
+                         th:text="*{secondMessage}"></div>
+                    <div class="alert alert-primary message" style="visibility: hidden"
+                         th:if="*{secondMessage == null && firstMessage ne null}"
+                         th:text="*{firstMessage}"></div>
+                    <input class="file-url"
+                           id="second-file-url"
+                           name="secondFilePath"
+                           th:field="*{secondFilePath}"
+                           type="url"
+                    />
+                    <div class="script">
+                        <script th:inline="javascript">
+                            /*<![CDATA[*/
+                            const secondFile = [[*{secondFilePath}]];
+                            /*]]>*/
+                            if (secondFile) jmolApplet(400, 'load ' + secondFile + '', '1');
+                        </script>
+                    </div>
+                </div>
+                <input style="margin-top: 20px; padding: 5px 10px; font-size: 16px; background-color: rgb(255, 236, 225); border: none; cursor: pointer"
+                       type="submit" value="Detect">
+                <br>
+                <p style="font-weight: bold; font-size: large; margin-top: 15px; text-align: center"
+                   th:if="*{degreeOfSimilarity ne null}" th:text="*{degreeOfSimilarity}"></p>
             </div>
-            <div class="column">
-                <h3>PDB File Upload</h3>
-                <!-- Upload  -->
-                <p class="alert alert-primary" style="color: red" th:if="*{secondMessage ne null}"
-                   th:text="*{secondMessage}"></p>
-                <input id="second-file-upload"
-                       name="secondFile"
-                       style="margin-top: 10px; margin-left: 70px"
-                       type="file"
-                />
-                <!--                <div class="script">-->
-                <!--                    <script th:inline="javascript">-->
-                <!--                        /*<![CDATA[*/-->
-                <!--                        const secondFile = /*[[*{secondFileName}]]*/ '';-->
-                <!--                        /*]]>*/-->
-                <!--                        if (secondFile) jmolApplet(400, 'load ' + secondFile + '', '1');-->
-                <!--                    </script>-->
-                <!--                </div>-->
-            </div>
-            <input style="margin-top: 20px" type="submit" value="Detect">
         </form>
-                <form enctype="multipart/form-data" id="file-upload-form"
-                      style="margin-top: 15px"
-                      th:action="@{/visualization}"
-                      th:method="POST"
-                      th:object="${addFilesModel}"
-                >
-            <p style="font-weight: bold; font-size: large; margin-top: 15px; text-align: center"
-               th:if="*{degreeOfSimilarity ne null}" th:text="*{degreeOfSimilarity}"></p>
-                <p style="font-style: italic; font-size: medium; margin-top: 15px; text-align: center"
-                   th:if="*{degreeOfSimilarity ne null}">
-                    You can see 3D visualization of the proteins <a th:href="@{/visualization/}"><b>here</b></a>.
-                </p>
-                    <input style="margin-top: 20px" type="submit" value="Detect">
-                </form>
-            </div>
     </div>
     <div th:replace="fragments/footer">Footer</div>
 </div>

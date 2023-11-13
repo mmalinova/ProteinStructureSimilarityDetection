@@ -25,7 +25,7 @@
 ///////
 //
 // Server-side Jmol delivers:
-//   simple relay for cross-domain files
+//   simple relay for cross-domain URLs
 //
 //   options:
 //
@@ -43,7 +43,7 @@
 //
 //   encoding
 //         ""        no encoding (default)
-//         "base64"  BASE64-encoded binary files for Chrome synchronous AJAX
+//         "base64"  BASE64-encoded binary URLs for Chrome synchronous AJAX
 //                      prepends ";base64," to encoded output  
 //
 // simple server tests:

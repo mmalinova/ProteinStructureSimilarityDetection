@@ -7,10 +7,10 @@
 
 // This file simple_old.htm is exactly the same as an old one
 // except for the addition of the two JS script tags above and Info below. 
-// Clearly you could concatenate those two files and make one
-// called "Jmol.js" and then not have ANY difference with any older files.
+// Clearly you could concatenate those two URLs and make one
+// called "Jmol.js" and then not have ANY difference with any older URLs.
 // 
-// If you have a big site with many HTML files, see comments in js/Jmol2.js
+// If you have a big site with many HTML URLs, see comments in js/Jmol2.js
 
 Jmol.Info = {
       
@@ -63,7 +63,7 @@ if (xxxx.length == 5 || xxxx.length == 0) {
 //	+'set errorCallback "myCallback";'
 	+'set defaultloadscript "isDssp = false;set defaultVDW babel;if(!h2oOn){display !water}";'
 	+'set zoomlarge false;set echo top left;echo loading XXXX...;refresh;'
-	+'load "http://www.rcsb.org/pdb/files/XXXX.pdb";set echo top center;echo XXXX;'
+	+'load "http://www.rcsb.org/pdb/URLs/XXXX.pdb";set echo top center;echo XXXX;'
 	+'spacefill off;wireframe off;cartoons on;color structure;'
 	script = script.replace(/XXXX/g, xxxx)
 } else {

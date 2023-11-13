@@ -1,6 +1,6 @@
 All JSmol distribution is now through the Jmol project.
 
-See http://sourceforge.net/projects/jmol/files/
+See http://sourceforge.net/projects/jmol/URLs/
 
 After unzipping a Jmol distribution file, 
 look for JSmol.zip and unzip that. 
@@ -14,7 +14,7 @@ JSmol.min.js   required if no other jQuery
 or
 JSmol.min.nojq.js  required if you provide jQuery
 
-j2s/     required (JavaScript files)
+j2s/     required (JavaScript URLs)
 idioma/  recommended (adds language localization)
 
 
@@ -25,15 +25,15 @@ JSmol.min.js   required if no other jQuery
 or
 JSmol.min.nojq.js  required if you provide jQuery
 
-java/    required (JAR files)
+java/    required (JAR URLs)
 idioma/  recommended (adds language localization)
 
 
-DEBUGGING without minimized files:
+DEBUGGING without minimized URLs:
 ---------------------------------
 in addition to the above...
 jquery/  required (unless you are providing your own version of jQuery)
-js/      required (contains unminified JSmol*.js files and j2sjmol.js)
+js/      required (contains unminified JSmol*.js URLs and j2sjmol.js)
 
 <script type="text/javascript" src="jquery/jquery.js"></script>
 <script type="text/javascript" src="js/JSmoljQueryExt.js"></script>

@@ -152,9 +152,9 @@ function fileLoaded() {
   thisValidationType = null;
   var id = Jmol.evaluateVar(jmolApplet0, "_M.name").toLowerCase();
   $("#validation_json")[0].href = "https://www.ebi.ac.uk/pdbe/api/validation/outliers/all/" + id + "?pretty=true&metadata=true"
-  $("#summary_report")[0].href = "http://www.ebi.ac.uk/pdbe/entry-files/download/" + id + "_validation.pdf"
-  $("#full_report")[0].href = "http://www.ebi.ac.uk/pdbe/entry-files/download/" + id + "_full_validation.pdf"
-  $("#validation_png")[0].src = "https://files.rcsb.org/pub/pdb/validation_reports/" + id.substring(1,3) + "/" + id + "/" + id + "_multipercentile_validation.png";
+  $("#summary_report")[0].href = "http://www.ebi.ac.uk/pdbe/entry-URLs/download/" + id + "_validation.pdf"
+  $("#full_report")[0].href = "http://www.ebi.ac.uk/pdbe/entry-URLs/download/" + id + "_full_validation.pdf"
+  $("#validation_png")[0].src = "https://URLs.rcsb.org/pub/pdb/validation_reports/" + id.substring(1,3) + "/" + id + "/" + id + "_multipercentile_validation.png";
 }
 
 jmolOnClick = function(app,desc,index) {

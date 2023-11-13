@@ -2,3 +2,12 @@
     margin: auto;
     text-align: center;
 }
+
+.factor {
+    width: 100px;
+}
+
+.message {
+    color: red;
+    margin-top: 15px;
+}

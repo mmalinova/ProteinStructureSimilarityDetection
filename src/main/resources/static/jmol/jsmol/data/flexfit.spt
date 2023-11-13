@@ -1,4 +1,4 @@
-load files "$tyrosine" "$lysergamide"
+load URLs "$tyrosine" "$lysergamide"
 select 2.1; translateSelected {10 0 0}
 frame *;zoomto 0 {*} 0
 select {2.1}

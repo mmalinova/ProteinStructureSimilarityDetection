@@ -2,9 +2,12 @@ package bg.project.proteinstructuresimilaritydetection.config;
 
 import bg.project.proteinstructuresimilaritydetection.constants.Constants;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class Calculations {
 
-    public void fillMatrixCell(
+    public double[][] fillMatrixCell(
             double[][] matrix,
             int i,
             int j,
@@ -25,7 +28,12 @@ public class Calculations {
         );
         double byColumn = matrix[i - 1][j] + (Constants.NEGATIVE_TYPE_FACTOR);
         double byRow = matrix[i][j - 1] + (Constants.NEGATIVE_TYPE_FACTOR);
-        matrix[i][j] = Math.max(Math.max(diagonally, byColumn), byRow);
+        BigDecimal bd = BigDecimal.valueOf(Math.max(Math.max(diagonally, byColumn), byRow));
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
+        double roundedNumber = bd.doubleValue();
+        matrix[i][j] = roundedNumber;
+
+        return matrix;
     }
 
     public double calculateScoringFunction(
@@ -57,14 +65,25 @@ public class Calculations {
         }
     }
 
-     public double getDistanceBetweenTwoPoints(
-             double x1,
-             double y1,
-             double z1,
-             double x2,
-             double y2,
-             double z2
-            ) {
+    public double getDistanceBetweenTwoPoints(
+            double x1,
+            double y1,
+            double z1,
+            double x2,
+            double y2,
+            double z2
+    ) {
         return Math.sqrt(((x2 - x1) * (x2 - x1)) + ((y2 - y1) * (y2 - y1)) + ((z2 - z1) * (z2 - z1)));
+    }
+
+    public long calculateTheDegreeOfSimilarity(
+            double maxValueFromTheMatrix,
+            int numberOfElementsFromTheSmallestProtein
+    ) {
+        BigDecimal bd = BigDecimal.valueOf(maxValueFromTheMatrix /
+                (numberOfElementsFromTheSmallestProtein * Constants.POSITIVE_TYPE_FACTOR)
+                * 100);
+        bd = bd.setScale(0, RoundingMode.HALF_UP);
+        return bd.intValue();
     }
 }

@@ -16,6 +16,17 @@
     transform-style: preserve-3d;
 }
 
+@property --swing-x {
+    initial-value: 0;
+    inherits: false;
+    syntax: '<integer>';
+}
+@property --swing-y {
+    initial-value: 0;
+    inherits: false;
+    syntax: '<integer>';
+}
+
 #error-body {
     min-height: 100vh;
     display: flex;
@@ -61,7 +72,7 @@ h1 {
 h1:after {
     -webkit-animation: swing var(--speed) infinite alternate ease-in-out;
     animation: swing var(--speed) infinite alternate ease-in-out;
-    content: "Oops";
+    content: "Ops";
     position: absolute;
     top: 0;
     left: 0;

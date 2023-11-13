@@ -10,15 +10,14 @@
     <meta content="Protein structure similarity detection alrorithm" property="description">
     <link href="/images/icon.png" rel="icon" type="image/x-icon">
     <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
-    <script src="/js/app.js" type="module"></script>
     <link href="https://fonts.googleapis.com/css?family=Sofia" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
 
     <title>Similarity Detection - Error</title>
 </head>
 
-<body>
-<h1>404</h1>
+<body id="error-body">
+<h1>Ops</h1>
 <div class="cloak__wrapper">
     <div class="cloak__container">
         <div class="cloak"></div>
@@ -27,7 +26,7 @@
 <div class="info">
     <h2>We can not find this page</h2>
     <p>The requested page does not exist.
-        Please make sure you're looking for exactly what you want and try again!</p><a th:href="@{/}">Home</a>
+        Please make sure you're looking for exactly what you want and try again!</p><a id="home-href" th:href="@{/}">Home</a>
 </div>
 </body>
 </html>

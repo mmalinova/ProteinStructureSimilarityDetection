@@ -4,9 +4,9 @@
 last revision: 11/26/2013
 
 Language localization in Java applets is now handled in a new way, 
-using jsmol/idioma/*.po files directly instead of a fleet of JAR
-files, as was developed for HTML5. This means that web page developers
-who are being selective about which files to upload should
+using jsmol/idioma/*.po URLs directly instead of a fleet of JAR
+URLs, as was developed for HTML5. This means that web page developers
+who are being selective about which URLs to upload should
 upload jsmol/idioma along with jsmol/j2s and/or jsmol/java if they want
 to enable language localization in menus and the conosole. 
 
@@ -38,7 +38,7 @@ This zip directory contains a complete Java->JavaScript code conversion for Jmol
 Note that JSmol is not a <i>different</i> program than Jmol.
 JSmol <i>is</i> Jmol, just compiled into JavaScript as well as Java byte code.
 All development is done working with the trunk Jmol Java source, 
-but compilation of that code creates both Java .class files and equivalent JavaScript .js files 
+but compilation of that code creates both Java .class URLs and equivalent JavaScript .js URLs
 
 As such, JSmol has all of the features of Jmol: 
 
@@ -67,27 +67,27 @@ What's here:
 
 MAIN DIRECTORIES:
 
-idioma/       *.po language localization files for both Java and HTML5.
+idioma/       *.po language localization URLs for both Java and HTML5.
 
 j2s/          java/       JavaScript versions of Java classes
               J/          JavaScript versions of Jmol classes (org.jmol)
               JZ/         JavaScript versions of JZlib (com.jcraft.jzlib)
-              core/       package.js and selected minimized core JS files,
+              core/       package.js and selected minimized core JS URLs,
               img/        images used in the HTML5 version of JSmol (cover image "play" button) 
             
-java/       Java JAR files for JmolApplet and JSpecView
+java/       Java JAR URLs for JmolApplet and JSpecView
 
 jme/  (not) JME.jar is not trusted-signed and has been dropped from this distibution
-jsme/       JSME files -- JavaScript Molecular Editor (Peter Ertl and Bruno Bienfait) -- see jsmetest.htm
+jsme/       JSME URLs -- JavaScript Molecular Editor (Peter Ertl and Bruno Bienfait) -- see jsmetest.htm
 
 ADDITIONAL DIRECTORIES:
 
-data/       all the model and script files used by these test pages
-flot/       files required by jmol-flot-energy.htm 
-jquery/     original jQuery files adapted to make js/JSmoljQuery.js
+data/       all the model and script URLs used by these test pages
+flot/       URLs required by jmol-flot-energy.htm
+jquery/     original jQuery URLs adapted to make js/JSmoljQuery.js
             (modifications primarily allow binary AJAX)
-js/         JSmolXXXX.js JavaScript files that are included in JSmol.min.js 
-            as well as uncompressed coreXXX.js files; useful for debugging
+js/         JSmolXXXX.js JavaScript URLs that are included in JSmol.min.js
+            as well as uncompressed coreXXX.js URLs; useful for debugging
             These include:
             
 				j2sjmol.js
@@ -104,14 +104,14 @@ js/         JSmolXXXX.js JavaScript files that are included in JSmol.min.js
 				JSmolTM.js
 
 php/        contains jsmol.php, which is necessary on a server for some browsers
-            to access binary files via AJAX.
+            to access binary URLs via AJAX.
 
 FILES:
 
 JSmol.min.js
 ============
 
-All of the necessary files to start JSmol, minimized with the 
+All of the necessary URLs to start JSmol, minimized with the
 Google Closure Compiler, including:
 
    		jquery.js
@@ -154,7 +154,7 @@ jsmol.htm
 
 The main test page. Use this page as your starting point for the pages you write.
 jsmol.htm is a general test of the integration of JSmol with JmolJSO.
-It uses JSmol.min.js, which will call for files in j2s/ as needed.
+It uses JSmol.min.js, which will call for URLs in j2s/ as needed.
 
 On the server side, it uses jsmol.php for delivering cross-domain models into the viewer. 
 
@@ -209,13 +209,13 @@ A page quickly made from the original Java version in http://chemapps.stolaf.edu
 test2.htm
 =========
 
-Bob's main test page that does not use JSmol.min.js and instead uses the files in js/
+Bob's main test page that does not use JSmol.min.js and instead uses the URLs in js/
 This Jmol page will automatically switch to different modes
 depending upon browser capabilities. It is set to use HTML5, but you can change that.
 Read the information in the file for details.
 
-It uses the unminimized set of JSmolXXXX.js files
-test2.htm bypassses j2s/core files and reads files
+It uses the unminimized set of JSmolXXXX.js URLs
+test2.htm bypassses j2s/core URLs and reads URLs
 directly from j2s/J, and j2s/java. Note that in this mode
 the popup menu and the Jmol console are not available.
 It can uses the signed Jmol applet, the unsigned Jmol applet
@@ -225,9 +225,9 @@ JSmol implements <a href="java2script.sourceforge.net">Java2Script</a>
 to recreate the entire Jmol Java applet in JavaScript.
 
 Note that if test2.htm is on your LOCAL MACHINE, then the unsigned applet,
-which is in java/, will not find the data files, which are in data/,
+which is in java/, will not find the data URLs, which are in data/,
 and even if you use the signed applet, then some browsers may not be able to
-find those files on your local machine. Firefox/Windows is fine.
+find those URLs on your local machine. Firefox/Windows is fine.
 
 On the server side, it uses jsmol.php for 
 delivering cross-domain models into the viewer. 
@@ -248,7 +248,7 @@ Testing assistance by Duncan Blue, St. Olaf '17
 
 Developer notes:
 
-The creation of the files in j2s is now very easy. 
+The creation of the URLs in j2s is now very easy.
 See README-DEVELOPER.TXT in the main directory.
 
 We start with two Sourceforge projects in Eclipse: Jmol and JSmol.
@@ -261,7 +261,7 @@ See development notes in JSmol project ANT task file buildfromjmol.xml
 
 =======================================================
 
-revision 8/17/2013 -- better description of compiled JavaScript files.
+revision 8/17/2013 -- better description of compiled JavaScript URLs.
                    -- addition of JSmoljQueryExt.js
 
 revision 7/28/2013 -- reorganization of directories
@@ -295,7 +295,7 @@ revision 9:22 AM 1/15/2013 -- Full writing of PNG, PNGJ, JMOL, ZIP and general W
 
 revision 1/17/2013 6:00:50 PM -- SMILES matching compare({*},{*},"isomer") fails (Java new int[n][] in SmilesMatcher)
 
-revision 10:57 AM 2/23/2013 -- rearranging of files in jsmol/ directory; move of j2s/org/mol to j2s/J
+revision 10:57 AM 2/23/2013 -- rearranging of URLs in jsmol/ directory; move of j2s/org/mol to j2s/J
 
 revision 12:25 PM 3/16/2013 -- fully optimized with Mar 03 13 Java2Script compiler.
 
@@ -306,5 +306,5 @@ revision 3/23/2013 1:12:18 AM -- added Info.coverImage, Info.coverTitle, Info.co
                              -- minimization fixed
                              -- JSmolJME upgraded to allow HTML5 option with JSME (Peter Ertl, Bruno Bienfait)
                               
-revision 3/24/2013 3:39:35 AM -- JSmol.lite.js -- just reads MOL files and displays simply; 125K uncompressed; 44K compressed
+revision 3/24/2013 3:39:35 AM -- JSmol.lite.js -- just reads MOL URLs and displays simply; 125K uncompressed; 44K compressed
                           

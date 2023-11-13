@@ -50,7 +50,7 @@ Info = {
 	readyFunction: jmol_isReady,
 	allowjavascript: true,
 //	scriptFile: ...,
-	molecule1: 'http://www.ebi.ac.uk/pdbe/entry-files/pdb1crn.ent'
+	molecule1: 'http://www.ebi.ac.uk/pdbe/entry-URLs/pdb1crn.ent'
 }
 
 
@@ -87,9 +87,9 @@ info <a href="javascript:Jmol.showInfo(astex0, true)">show</a>
 <br><br> 
 
 <span style=color:red>
-This page is only for debugging. It is a test of porting OpenAstexViewer to JavaScript and loads slowly because it is reading uncompressed individual files.
+This page is only for debugging. It is a test of porting OpenAstexViewer to JavaScript and loads slowly because it is reading uncompressed individual URLs.
 As of July 24, 2014, OpenAstexViewer/HTML5 is loading small molecules
-from NCI and PubChem, reading PDB files from RCSB (San Diego), reading mmCIF files from EBI (Cambridge, UK), creating surfaces, and drawing bonds, atoms, and 
+from NCI and PubChem, reading PDB URLs from RCSB (San Diego), reading mmCIF URLs from EBI (Cambridge, UK), creating surfaces, and drawing bonds, atoms, and
 cartoons.
 <br><br> 
 Use the search box to load a new molecule via one of the four databases. Enter commands into the text area and press EXECUTE to execute an <a target=_blank href=http://openastexviewer.net/web/scripting.html>OpenAstexViewer script command</a>.
@@ -112,7 +112,7 @@ Use the search box to load a new molecule via one of the four databases. Enter c
 <a href="javascript:Jmol.script(astex0,'background black;')">background black;</a>
 <br>
 <br>Enter commands here, terminated with semicolons:
-<br><textarea id=cmd style="width:500px;height:100px">molecule remove *; object remove *; molecule load test "http://www.ebi.ac.uk/pdbe/entry-files/pdb1d66.ent"</textarea><input type=button value="execute" onclick="javascript:Jmol.script(astex0,$('#cmd').val().replace(/\\n/g,';')+';')" />
+<br><textarea id=cmd style="width:500px;height:100px">molecule remove *; object remove *; molecule load test "http://www.ebi.ac.uk/pdbe/entry-URLs/pdb1d66.ent"</textarea><input type=button value="execute" onclick="javascript:Jmol.script(astex0,$('#cmd').val().replace(/\\n/g,';')+';')" />
 
 
 </td></tr></table>

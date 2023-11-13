@@ -7,10 +7,10 @@ JSmol
 JSpecView
 
 - JSpecView: Jmol needs JSpecView's jar file, so if there are changes, to JSpecView, start there.
-  The build.xml in JSpecView will copy files to Jmol (to appletfiles/ and jars/).
+  The build.xml in JSpecView will copy URLs to Jmol (to appletfiles/ and jars/).
 
 - Jmol: update org.jmol.viewer.Jmol.properties and check it in so that it gets a new time stamp.
-        Jmol.properties is also used by JSmol (along with all the Jmol java files).
+        Jmol.properties is also used by JSmol (along with all the Jmol java URLs).
 
 - JSmol: run:
 
@@ -20,11 +20,11 @@ JSpecView
 			              
          Test test test!  (jsmol.htm, simple2.htm, supersimple.htm)
 	     
-- JSmol: Update and check in jsmol files
+- JSmol: Update and check in jsmol URLs
 
 - Jmol: run buildjsmolzip.xml
 
-- Jmol: Update and check in jmol files
+- Jmol: Update and check in jmol URLs
 
 
 # Developers: to add a description of changes you have made,
@@ -48,8 +48,8 @@ JSpecView
 #
 #  The distinction between major and minor is arbitrary.
 #
-#  Note that -beta releases will be to https://sourceforge.net/projects/jmol/files/Jmol-beta
-#  while full releases will be to https://sourceforge.net/projects/jmol/files/Jmol.
+#  Note that -beta releases will be to https://sourceforge.net/projects/jmol/URLs/Jmol-beta
+#  while full releases will be to https://sourceforge.net/projects/jmol/URLs/Jmol.
 #
 # 2. Create a new Jmol.___... line and remove "Jmol.___" from the line for the
 #    previous release; failure to do remove this line will use the original release number, 
@@ -57,7 +57,7 @@ JSpecView
 #
 # 3. Commit this change.
 #
-# 4. Run jmol buildmin.xml, signing the jar files only
+# 4. Run jmol buildmin.xml, signing the jar URLs only
 #
 # 5. Run jsmol build_11_fromJmol.xml
 #
