@@ -75,9 +75,7 @@
                     <div class="script">
                         <script th:inline="javascript">
                             /*<![CDATA[*/
-                            const firstFile = [[ * {firstFilePath}]
-                            ]
-                            ;
+                            const firstFile = [[*{firstFilePath}]];
                             /*]]>*/
                             if (firstFile) jmolApplet(400, 'load ' + firstFile + '', '0');
                         </script>
@@ -99,9 +97,7 @@
                     <div class="script">
                         <script th:inline="javascript">
                             /*<![CDATA[*/
-                            const secondFile = [[ * {secondFilePath}]
-                            ]
-                            ;
+                            const secondFile = [[*{secondFilePath}]];
                             /*]]>*/
                             if (secondFile) jmolApplet(400, 'load ' + secondFile + '', '1');
                         </script>

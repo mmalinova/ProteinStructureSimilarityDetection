@@ -147,9 +147,7 @@ public class HomeController {
             // Create a Path object from the path
             Path filePath = Paths.get(path);
             // Get the file extension
-            String fileExtension = getFileExtension(filePath);
-            System.out.println("File Extension: " + fileExtension);
-            return fileExtension;
+            return getFileExtension(filePath);
         } catch (URISyntaxException e) {
             e.printStackTrace();
             return URL_ERROR;
